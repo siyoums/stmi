@@ -1,0 +1,13 @@
+{
+  "files.associations": {
+    "systick.h": "c",
+    "system.h": "c",
+    "gpio.h": "c",
+    "common-defines.h": "c",
+    "vector.h": "c",
+    "timer.h": "c",
+    "scb.h": "c"
+  },
+  "C_Cpp.errorSquiggles": "enabled",
+  "cmake.configureOnOpen": false
+}
