@@ -9,8 +9,8 @@ static uint8_t data_buffer = 0U;
 static bool data_available = false;
 
 void usart2_isr(void) {
-  const bool overrun_occurred = usart_get_flag(USART2, USART_FLAG_ORE);
-  const bool received_data = usart_get_flag(USART2, USART_FLAG_RXNE);
+  const bool overrun_occurred = usart_get_flag(USART2, USART_FLAG_ORE) == 1;
+  const bool received_data = usart_get_flag(USART2, USART_FLAG_RXNE) == 1;
 
   if (received_data || overrun_occurred) {
     data_buffer = (uint8_t)usart_recv(USART2);
@@ -45,7 +45,7 @@ void uart_write_byte(uint8_t data) {
 }
 
 uint32_t uart_read(uint8_t *data, const uint32_t length) {
-  if (length > 0) {
+  if (length > 0 && data_available) {
     *data = data_buffer;
     data_available = false;
     return 1;

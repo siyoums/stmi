@@ -6,7 +6,11 @@
     "common-defines.h": "c",
     "vector.h": "c",
     "timer.h": "c",
-    "scb.h": "c"
+    "scb.h": "c",
+    "rcc.h": "c",
+    "stdint.h": "c",
+    "uart.h": "c",
+    "adc.h": "c"
   },
   "C_Cpp.errorSquiggles": "enabled",
   "cmake.configureOnOpen": false

@@ -1,6 +1,7 @@
 #include <libopencm3/stm32/gpio.h>
 #include <libopencm3/stm32/rcc.h>
 
+#include "adc.h"
 #include "core/system.h"
 #include "timer.h"
 #include <libopencm3/cm3/scb.h>
@@ -16,16 +17,23 @@
 #define TX_PIN (GPIO2)
 #define RX_PIN (GPIO3)
 
+#define ADC_PIN (GPIO14)
+
 static void vector_setup(void) { SCB_VTOR = BOOTLOADER_SIZE; }
 
 static void gpio_setup(void) {
-  rcc_periph_clock_enable(RCC_GPIOD);
+  rcc_periph_clock_enable(RCC_GPIOA | RCC_GPIOD);
 
   // pwm led phase blink thing
   gpio_mode_setup(LED_PORT, GPIO_MODE_AF, GPIO_PUPD_NONE, LED_PIN);
   gpio_set_af(LED_PORT, GPIO_AF2, LED_PIN);
 
+  // uart
   gpio_mode_setup(UART_PORT, GPIO_MODE_AF, GPIO_PUPD_NONE, TX_PIN | RX_PIN);
+  gpio_set_af(UART_PORT, GPIO_AF7, TX_PIN | RX_PIN);
+
+  // adc
+  gpio_mode_setup(LED_PORT, GPIO_MODE_ANALOG, GPIO_PUPD_NONE, ADC_PIN);
 }
 
 int main(void) {
@@ -33,6 +41,8 @@ int main(void) {
   system_setup();
   gpio_setup();
   timer_setup();
+  uart_setup();
+  adc_setup();
 
   float duty_cycle = 0.0f;
 
