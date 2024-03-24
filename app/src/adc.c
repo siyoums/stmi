@@ -17,7 +17,7 @@ void adc_setup(void) {
   adc_power_on(ADC1);
 
   // wait for adc stargin up (will be replaced with systick delay later)
-  for (uint32_t i = 0; i < 8000; i++) {
+  for (uint32_t i = 0; i < 800000; i++) {
     __asm__("nop");
   }
 }

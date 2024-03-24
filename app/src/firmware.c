@@ -13,16 +13,23 @@
 #define LED_PORT (GPIOD)
 #define LED_PIN (GPIO15)
 
+// uart defines
 #define UART_PORT (GPIOA)
 #define TX_PIN (GPIO2)
 #define RX_PIN (GPIO3)
 
+// adc defines
 #define ADC_PIN (GPIO14)
+
+// i2c defines
+#define I2C_PORT (GPIOB)
+#define SDA_PIN (GPIO11)
+#define SCL_PIN (GPIO10)
 
 static void vector_setup(void) { SCB_VTOR = BOOTLOADER_SIZE; }
 
 static void gpio_setup(void) {
-  rcc_periph_clock_enable(RCC_GPIOA | RCC_GPIOD);
+  rcc_periph_clock_enable(RCC_GPIOA | RCC_GPIOD | RCC_GPIOB);
 
   // pwm led phase blink thing
   gpio_mode_setup(LED_PORT, GPIO_MODE_AF, GPIO_PUPD_NONE, LED_PIN);
@@ -34,7 +41,21 @@ static void gpio_setup(void) {
 
   // adc
   gpio_mode_setup(LED_PORT, GPIO_MODE_ANALOG, GPIO_PUPD_NONE, ADC_PIN);
+
+  // i2c for lcd module
+  gpio_mode_setup(I2C_PORT, GPIO_MODE_AF, GPIO_PUPD_NONE, SDA_PIN | SCL_PIN);
+  gpio_set_af(I2C_PORT, GPIO_AF4, SDA_PIN | SCL_PIN);
 }
+
+// lcd init, will be removed in final fw
+// void lcd_init(void) {
+//   uint32_t start_time = system_get_ticks();
+
+//   while (1) {
+//     if (system_get_ticks() - start_time >= 50) {
+//     }
+//   }
+// }
 
 int main(void) {
   vector_setup();
@@ -63,6 +84,7 @@ int main(void) {
       uint8_t data = uart_read_byte();
       uart_write_byte(data + 1);
     }
+
     // Do useful work
   }
 }
